@@ -21,7 +21,6 @@ import (
 	"context"
 	"errors"
 	"log"
-	"os"
 	"regexp"
 	"strings"
 
@@ -118,14 +117,14 @@ func doUpgrade(cli *client.Client, cnt types.Container, pullOnly bool) error {
 	}
 
 	log.Printf("Recreating %v", currentContainer.Name)
-	err = cli.ContainerStop(ctx, os.Args[1], container.StopOptions{})
+	err = cli.ContainerStop(ctx, currentContainer.Name, container.StopOptions{})
 	if err != nil {
 		return err
 	}
 
 	log.Printf("Stopped %v", currentContainer.Name)
 
-	err = cli.ContainerRemove(ctx, os.Args[1], container.RemoveOptions{RemoveVolumes: false})
+	err = cli.ContainerRemove(ctx, currentContainer.Name, container.RemoveOptions{RemoveVolumes: false})
 	if err != nil {
 		return err
 	}
